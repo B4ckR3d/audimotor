@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
+import { useLang } from '@/contexts/LanguageContext';
 
 interface HeroData {
   title: string;
@@ -33,6 +34,7 @@ const defaultHero: HeroData = {
 };
 
 export default function Hero() {
+  const { t } = useLang();
   const [hero, setHero] = useState<HeroData>(defaultHero);
   const [slides, setSlides] = useState<CarSlide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -163,10 +165,10 @@ export default function Hero() {
               onClick={() => goToSlide(i)}
               className={`transition-all duration-500 ${
                 i === currentSlide
-                  ? 'w-10 h-1 bg-[#c8a45c]'
+                  ? 'w-10 h-1 bg-[var(--accent)]'
                   : 'w-4 h-1 bg-white/30 hover:bg-white/50'
               }`}
-              aria-label={`Slide ${i}`}
+              aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>

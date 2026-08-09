@@ -1,75 +1,149 @@
-'use client';
+﻿﻿﻿﻿﻿﻿'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useLang } from '@/contexts/LanguageContext';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [brandName, setBrandName] = useState('Audi Motor');
+  const [brandLogo, setBrandLogo] = useState('');
+  const { theme, toggleTheme } = useTheme();
+  const { lang, toggleLang, t } = useLang();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
+
+    fetch('/api/public/settings')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.brand_name) setBrandName(data.brand_name);
+        if (data.brand_logo_url) setBrandLogo(data.brand_logo_url);
+      })
+      .catch(() => {});
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navLinks = [
+    { href: '/', label: t('nav.home') },
+    { href: '/cars', label: t('nav.cars') },
+    { href: '/#koleksi', label: t('nav.collection') },
+    { href: '/#tentang', label: t('nav.about') },
+    { href: '/admin', label: t('nav.admin'), accent: true },
+  ];
+
   return (
-    <nav
-      className={`fixed w-full z-50 transition-all duration-300 backdrop-blur-md ${
-        scrolled ? 'bg-[#050505]/95 shadow-lg' : 'bg-[#050505]/80'
-      } border-b border-gray-800`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <Link href="/" className="flex-shrink-0 flex items-center gap-3 cursor-pointer">
-            <div className="w-12 h-12 rounded-full border-2 border-gray-500 flex items-center justify-center bg-gradient-to-br from-gray-700 to-black overflow-hidden shadow-[0_0_10px_rgba(150,150,150,0.3)]">
-              <i className="fas fa-car-side text-gray-300 text-xl"></i>
+    <>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 backdrop-blur-md ` + (scrolled ? "bg-[var(--surface-2)]/95 shadow-lg" : "bg-[var(--surface-2)]/80") + " border-b border-[var(--border-1)]"}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            {/* --- Left: Hamburger --- */}
+            <div className="flex-1 flex justify-start">
+              <button
+                type="button"
+                onClick={() => setMobileOpen(true)}
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-all"
+                aria-label="Open menu"
+              >
+                <i className="fas fa-bars text-xl" />
+              </button>
             </div>
-            <span className="font-display font-bold text-2xl tracking-wider uppercase text-chrome-effect">
-              Audi Motor
-            </span>
-          </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide">
-              Beranda
-            </Link>
-            <Link href="/#koleksi" className="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide">
-              Koleksi Mobil
-            </Link>
-            <Link href="/#tentang" className="text-gray-300 hover:text-white transition-colors text-sm font-medium tracking-wide">
-              Tentang Kami
-            </Link>
+            {/* --- Center: Logo --- */}
             <Link
-              href="/admin"
-              className="px-5 py-2.5 rounded-full border border-gray-500 hover:border-gray-300 hover:bg-gray-800 transition-all text-sm font-medium tracking-wide"
+              href="/"
+              className="flex-shrink-0 flex items-center gap-3 cursor-pointer group"
             >
-              Admin
+              <div className="w-11 h-11 rounded-full border-2 border-[var(--border-2)] flex items-center justify-center bg-gradient-to-br from-[var(--surface-3)] to-[var(--surface-2)] overflow-hidden shadow-[0_0_10px_rgba(150,150,150,0.15)] group-hover:shadow-[0_0_16px_rgba(150,150,150,0.25)] transition-shadow">
+                {brandLogo ? (
+                  <img
+                    src={brandLogo}
+                    alt={brandName}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <i className="fas fa-car-side text-[var(--text-3)] text-xl" />
+                )}
+              </div>
+              <span className="font-display font-bold text-xl tracking-wider uppercase text-chrome-effect">
+                {brandName}
+              </span>
             </Link>
-          </div>
 
-          <div className="md:hidden flex items-center">
-            <button
-              type="button"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="text-gray-300 hover:text-white focus:outline-none"
-            >
-              <i className={`fas ${mobileOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
-            </button>
+            {/* --- Right: Lang + Theme --- */}
+            <div className="flex-1 flex justify-end items-center gap-1">
+              <button
+                type="button"
+                onClick={toggleLang}
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-xs font-bold tracking-wider text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-all uppercase"
+                aria-label="Toggle language"
+              >
+                {lang === 'id' ? 'EN' : 'ID'}
+              </button>
+
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="w-10 h-10 flex items-center justify-center rounded-lg text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-all"
+                aria-label="Toggle theme"
+              >
+                <i
+                  className={theme === 'dark' ? 'fas fa-sun text-lg' : 'fas fa-moon text-lg'}
+                />
+              </button>
+            </div>
           </div>
         </div>
+      </nav>
 
-        {mobileOpen && (
-          <div className="md:hidden pb-4 border-t border-gray-800 pt-4">
-            <div className="flex flex-col space-y-3">
-              <Link href="/" className="text-gray-300 hover:text-white transition-colors text-sm font-medium" onClick={() => setMobileOpen(false)}>Beranda</Link>
-              <Link href="/#koleksi" className="text-gray-300 hover:text-white transition-colors text-sm font-medium" onClick={() => setMobileOpen(false)}>Koleksi Mobil</Link>
-              <Link href="/#tentang" className="text-gray-300 hover:text-white transition-colors text-sm font-medium" onClick={() => setMobileOpen(false)}>Tentang Kami</Link>
-              <Link href="/admin" className="text-gray-300 hover:text-white transition-colors text-sm font-medium" onClick={() => setMobileOpen(false)}>Admin</Link>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
+      {/* Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      {/* Left Drawer */}
+      <aside
+        className={`fixed top-0 left-0 z-50 h-full w-72 bg-[var(--surface-2)] border-r border-[var(--border-1)] shadow-2xl transform transition-all duration-300 ease-out ` + (mobileOpen ? "translate-x-0" : "-translate-x-full")}
+      >
+        <div className="flex items-center justify-between h-20 px-6 border-b border-[var(--border-1)]">
+          <span className="font-display font-semibold text-sm tracking-widest uppercase text-[var(--text-3)]">
+            {t('nav.menu')}
+          </span>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(false)}
+            className="w-9 h-9 flex items-center justify-center rounded-lg text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-[var(--surface-3)] transition-all"
+            aria-label="Close menu"
+          >
+            <i className="fas fa-times text-lg" />
+          </button>
+        </div>
+
+        <div className="flex flex-col py-6 px-4 space-y-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMobileOpen(false)}
+              className={'px-4 py-3 rounded-lg text-sm font-medium tracking-wide transition-all hover:bg-[var(--surface-3)] ' + (link.accent ? 'text-[var(--accent)] hover:text-[var(--accent-hover)]' : 'text-[var(--text-2)] hover:text-[var(--text-1)]')}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </aside>
+    </>
   );
 }
+
+
+

@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @theme inline {
   --font-display: 'Inter', system-ui, sans-serif;
@@ -34,6 +34,9 @@
   --border-2: #404040;
   --border-3: #525252;
 
+  /* Cards & surfaces */
+  --surface-card: #151518;
+
   /* Spacing scale */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
@@ -61,6 +64,35 @@
   --transition-base: 0.3s ease;
   --transition-slow: 0.5s ease;
 }
+
+/* Light mode override */
+[data-theme="light"] {
+  --surface-1: #f2f2f2;
+  --surface-2: #ffffff;
+  --surface-3: #e8e8e8;
+  --surface-4: #d4d4d4;
+
+  --text-1: #0a0a0a;
+  --text-2: #1a1a1a;
+  --text-3: #525252;
+  --text-4: #737373;
+  --text-5: #a3a3a3;
+
+  --interactive-default: #0a0a0a;
+  --interactive-hover: #333333;
+  --interactive-focus: #2563eb;
+  --interactive-disabled: #a3a3a3;
+
+  --accent: #DDB511;
+  --accent-hover: #c9a30f;
+
+  --border-1: #d4d4d4;
+  --border-2: #a3a3a3;
+  --border-3: #737373;
+
+  --surface-card: #f5f5f5;
+}
+
 
 body {
   background: var(--surface-1);
@@ -447,6 +479,23 @@ body {
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+}
+
+/* Loading bar animation */
+@keyframes loadingBar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-loading-bar {
+  animation: loadingBar 1.5s ease-in-out infinite;
 }
 
 /* Selection color */

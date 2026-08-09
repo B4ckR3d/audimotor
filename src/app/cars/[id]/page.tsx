@@ -1,26 +1,48 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { getDb } from '@/lib/db';
+import { useLang } from '@/contexts/LanguageContext';
 import { Car } from '@/types';
 
-async function getCar(id: string): Promise<Car | null> {
-  try {
-    const db = getDb();
-    const row = db.prepare('SELECT * FROM cars WHERE id = ?').get(Number(id)) as Car | undefined;
-    return row || null;
-  } catch {
-    return null;
-  }
-}
+export default function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = useLang();
+  const [car, setCar] = useState<Car | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [id, setId] = useState<string | null>(null);
 
-export default async function CarDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const car = await getCar(id);
+  useEffect(() => {
+    params.then(({ id }) => setId(id));
+  }, [params]);
+
+  useEffect(() => {
+    if (!id) return;
+    fetch(`/api/cars/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setCar(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <main className="flex-1 pt-32 pb-20 bg-[var(--surface-1)] flex items-center justify-center">
+          <i className="fas fa-spinner fa-spin text-3xl text-[var(--text-5)]"></i>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   if (!car) {
-    notFound();
+    return <>{notFound()}</>;
   }
 
   const formatPrice = (price: number) =>
@@ -32,55 +54,54 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
     }).format(price);
 
   const fuelIcon = car.fuel.toLowerCase().includes('hybrid') ? 'fa-leaf' : 'fa-gas-pump';
-  const fuelColor = car.fuel.toLowerCase().includes('hybrid') ? 'text-green-500' : 'text-gray-400';
 
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-32 pb-20 bg-[#0a0a0c]">
+      <main className="flex-1 pt-32 pb-20 bg-[var(--surface-1)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/#koleksi" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
-            <i className="fas fa-arrow-left"></i> Kembali ke Koleksi
+          <Link href="/#koleksi" className="inline-flex items-center gap-2 text-[var(--text-4)] hover:text-[var(--text-1)] mb-8 transition-colors">
+            <i className="fas fa-arrow-left"></i> {t('car.back')}
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="relative h-96 lg:h-[500px] rounded-xl overflow-hidden border-glow">
               <img src={car.image_url} alt={car.name} className="w-full h-full object-cover" />
-              <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded text-sm font-bold text-white border border-gray-700">
-                {car.is_featured ? 'Featured' : 'Tersedia'}
+              <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-md px-4 py-2 rounded text-sm font-bold text-[var(--text-1)] border border-[var(--border-1)]">
+                {car.is_featured ? t('car.featured') : t('car.available')}
               </div>
             </div>
 
             <div>
-              <h1 className="text-4xl font-display font-bold text-white mb-2">
+              <h1 className="text-4xl font-display font-bold text-[var(--text-1)] mb-2">
                 {car.brand} {car.name}
               </h1>
-              <p className="text-gray-400 text-lg mb-6">{car.model} - {car.year}</p>
+              <p className="text-[var(--text-4)] text-lg mb-6">{car.model} - {car.year}</p>
 
-              <div className="text-3xl font-bold text-white mb-8">
+              <div className="text-3xl font-bold text-[var(--text-1)] mb-8">
                 {formatPrice(car.price)}
-                <p className="text-sm text-gray-500 font-normal mt-1">Harga Cash</p>
+                <p className="text-sm text-[var(--text-5)] font-normal mt-1">{t('car.cashPrice')}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
-                  { label: 'Kilometer', value: `${car.mileage.toLocaleString('id-ID')} KM`, icon: 'fa-tachometer-alt' },
-                  { label: 'Transmisi', value: car.transmission, icon: 'fa-cogs' },
-                  { label: 'Bahan Bakar', value: car.fuel, icon: fuelIcon, color: fuelColor },
-                  { label: 'Warna', value: car.color, icon: 'fa-palette' },
+                  { label: t('car.specs.km'), value: `${car.mileage.toLocaleString('id-ID')} KM`, icon: 'fa-tachometer-alt' },
+                  { label: t('car.specs.transmission'), value: car.transmission, icon: 'fa-cogs' },
+                  { label: t('car.specs.fuel'), value: car.fuel, icon: fuelIcon },
+                  { label: t('car.specs.color'), value: car.color, icon: 'fa-palette' },
                 ].map((item, i) => (
-                  <div key={i} className="bg-[#151518] p-4 rounded-xl border border-gray-800">
-                    <i className={`fas ${item.icon} ${item.color || 'text-gray-500'}`}></i>
-                    <p className="text-xs text-gray-500 mb-1">{item.label}</p>
-                    <p className="text-white font-semibold">{item.value}</p>
+                  <div key={i} className="bg-[var(--surface-card)] p-4 rounded-xl border border-[var(--border-1)]">
+                    <i className={`fas ${item.icon} text-[var(--text-5)]`}></i>
+                    <p className="text-xs text-[var(--text-5)] mb-1">{item.label}</p>
+                    <p className="text-[var(--text-1)] font-semibold">{item.value}</p>
                   </div>
                 ))}
               </div>
 
               {car.description && (
                 <div className="mb-8">
-                  <h3 className="text-white font-bold mb-3 font-display">Deskripsi</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{car.description}</p>
+                  <h3 className="text-[var(--text-1)] font-bold mb-3 font-display">{t('car.description')}</h3>
+                  <p className="text-[var(--text-4)] text-sm leading-relaxed">{car.description}</p>
                 </div>
               )}
 
@@ -91,10 +112,10 @@ export default async function CarDetailPage({ params }: { params: Promise<{ id: 
                   rel="noopener noreferrer"
                   className="btn-chrome px-8 py-4 rounded-md font-semibold text-center tracking-wide text-sm flex items-center justify-center gap-2"
                 >
-                  <i className="fab fa-whatsapp text-lg"></i> Tanya Via WhatsApp
+                  <i className="fab fa-whatsapp text-lg"></i> {t('car.whatsapp')}
                 </a>
-                <a href="tel:0215550123" className="px-8 py-4 rounded-md border border-gray-600 hover:border-gray-400 text-white font-semibold text-center tracking-wide text-sm transition-colors flex items-center justify-center gap-2">
-                  <i className="fas fa-phone-alt"></i> Telepon Showroom
+                <a href="tel:0215550123" className="px-8 py-4 rounded-md border border-[var(--border-2)] hover:border-[var(--text-4)] text-[var(--text-1)] font-semibold text-center tracking-wide text-sm transition-colors flex items-center justify-center gap-2">
+                  <i className="fas fa-phone-alt"></i> {t('car.phone')}
                 </a>
               </div>
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import ScrollReveal from './ScrollReveal';
+import { useLang } from '@/contexts/LanguageContext';
 
 interface StatsBarProps {
   totalUnits: number;
@@ -8,11 +9,12 @@ interface StatsBarProps {
 }
 
 export default function StatsBar({ totalUnits, brands }: StatsBarProps) {
+  const { t } = useLang();
   const stats = [
-    { value: `${totalUnits}+`, label: 'Unit Tersedia' },
-    { value: `${brands.length}`, label: 'Merek Premium' },
-    { value: '150+', label: 'Titik Inspeksi' },
-    { value: '100%', label: 'Dokumen Legal' },
+    { value: `${totalUnits}+`, label: t('stats.units') },
+    { value: `${brands.length}`, label: t('stats.brands') },
+    { value: '150+', label: t('stats.inspection') },
+    { value: '100%', label: t('stats.legal') },
   ];
 
   return (

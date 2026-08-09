@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
 
     const session = validateSession(token);
     if (!session) {
-      return NextResponse.json({ error: 'Sesi sudah berakhir' }, { status: 401 });
+      const response = NextResponse.json({ error: 'Sesi sudah berakhir' }, { status: 401 });
+      response.cookies.set('session_token', '', { maxAge: 0, path: '/' });
+      return response;
     }
 
     const permissions = getUserPermissions(session.role);

@@ -103,40 +103,40 @@ export default function CmsSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-[#0a0a0c]">
+      <div className="flex min-h-screen bg-[var(--surface-1)]">
         <AdminSidebar />
         <main className="flex-1 flex items-center justify-center">
-          <i className="fas fa-spinner fa-spin text-3xl text-gray-500"></i>
+          <i className="fas fa-spinner fa-spin text-3xl text-[var(--text-5)]"></i>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0c]">
+    <div className="flex min-h-screen bg-[var(--surface-1)]">
       <AdminSidebar />
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-4xl">
-          <h1 className="text-3xl font-display font-bold text-white mb-2">CMS Settings</h1>
-          <p className="text-gray-400 text-sm mb-8">Kelola pengaturan umum website Anda</p>
+          <h1 className="text-3xl font-display font-bold text-[var(--text-1)] mb-2">CMS Settings</h1>
+          <p className="text-[var(--text-4)] text-sm mb-8">Kelola pengaturan umum website Anda</p>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {groups.map(group => (
-              <div key={group.key} className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                  <i className={`fas ${group.icon} text-gray-400`}></i>
+              <div key={group.key} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                <h2 className="text-lg font-bold text-[var(--text-1)] mb-4 flex items-center gap-2">
+                  <i className={`fas ${group.icon} text-[var(--text-4)]`}></i>
                   {group.label}
                 </h2>
                 <div className="space-y-4">
                   {defaultSettings.filter(s => s.group === group.key).map(setting => (
                     <div key={setting.key}>
-                      <label className="block text-gray-400 text-sm mb-2">{setting.label}</label>
+                      <label className="block text-[var(--text-4)] text-sm mb-2">{setting.label}</label>
                       {setting.type === 'textarea' ? (
                         <textarea
                           value={form[setting.key] || ''}
                           onChange={(e) => setForm(prev => ({ ...prev, [setting.key]: e.target.value }))}
                           rows={3}
-                          className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm"
+                          className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm"
                         />
                       ) : setting.type === 'image' ? (
                         <div className="flex items-center gap-4">
@@ -144,10 +144,10 @@ export default function CmsSettingsPage() {
                             type="text"
                             value={form[setting.key] || ''}
                             onChange={(e) => setForm(prev => ({ ...prev, [setting.key]: e.target.value }))}
-                            className="flex-1 bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm"
+                            className="flex-1 bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm"
                             placeholder="URL gambar atau upload"
                           />
-                          <label className="px-4 py-3 bg-gray-800 rounded-lg text-gray-300 hover:text-white cursor-pointer transition-colors text-sm whitespace-nowrap">
+                          <label className="px-4 py-3 bg-[var(--surface-3)] rounded-lg text-[var(--text-3)] hover:text-[var(--text-1)] cursor-pointer transition-colors text-sm whitespace-nowrap">
                             <i className="fas fa-upload mr-2"></i>Upload
                             <input
                               type="file"
@@ -160,7 +160,7 @@ export default function CmsSettingsPage() {
                             />
                           </label>
                           {form[setting.key] && (
-                            <img src={form[setting.key]} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-gray-700" />
+                            <img src={form[setting.key]} alt="Preview" className="w-12 h-12 rounded-lg object-cover border border-[var(--border-2)]" />
                           )}
                         </div>
                       ) : (
@@ -168,7 +168,7 @@ export default function CmsSettingsPage() {
                           type="text"
                           value={form[setting.key] || ''}
                           onChange={(e) => setForm(prev => ({ ...prev, [setting.key]: e.target.value }))}
-                          className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm"
+                          className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm"
                         />
                       )}
                     </div>

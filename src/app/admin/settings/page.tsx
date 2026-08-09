@@ -222,10 +222,10 @@ export default function AdminSettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-[#0a0a0c]">
+      <div className="flex min-h-screen bg-[var(--surface-1)]">
         <AdminSidebar />
         <main className="flex-1 flex items-center justify-center">
-          <i className="fas fa-spinner fa-spin text-3xl text-gray-500"></i>
+          <i className="fas fa-spinner fa-spin text-3xl text-[var(--text-5)]"></i>
         </main>
       </div>
     );
@@ -239,16 +239,16 @@ export default function AdminSettingsPage() {
 
   return (
     <PermissionGuard section="settings" action="write">
-    <div className="flex min-h-screen bg-[#0a0a0c]">
+    <div className="flex min-h-screen bg-[var(--surface-1)]">
       <AdminSidebar />
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-4xl">
-          <h1 className="text-3xl font-display font-bold text-white mb-2">Pengaturan</h1>
-          <p className="text-gray-400 text-sm mb-6">Kelola profil, user, dan hak akses role</p>
+          <h1 className="text-3xl font-display font-bold text-[var(--text-1)] mb-2">Pengaturan</h1>
+          <p className="text-[var(--text-4)] text-sm mb-6">Kelola profil, user, dan hak akses role</p>
 
-          <div className="flex gap-1 mb-8 bg-[#151518] rounded-lg border border-gray-800 p-1">
+          <div className="flex gap-1 mb-8 bg-[var(--surface-2)] rounded-lg border border-[var(--border-1)] p-1">
             {tabs.map(tab => (
-              <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-all ${activeTab === tab.key ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white'}`}>
+              <button key={tab.key} onClick={() => setActiveTab(tab.key)} className={`flex items-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-all ${activeTab === tab.key ? 'bg-[var(--surface-3)] text-[var(--text-1)]' : 'text-[var(--text-4)] hover:text-[var(--text-1)]'}`}>
                 <i className={`fas ${tab.icon} text-xs`}></i>
                 {tab.label}
               </button>
@@ -264,27 +264,27 @@ export default function AdminSettingsPage() {
 
           {activeTab === 'profile' && (
             <div className="space-y-6">
-              <div className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><i className="fas fa-user text-gray-400"></i> Informasi Akun</h2>
+              <div className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                <h2 className="text-lg font-bold text-[var(--text-1)] mb-4 flex items-center gap-2"><i className="fas fa-user text-[var(--text-4)]"></i> Informasi Akun</h2>
                 <div className="space-y-3 text-sm">
-                  <div className="flex justify-between"><span className="text-gray-400">Username</span><span className="text-white font-medium">{profile?.username}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Role</span><span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-900/50 text-blue-400 border border-blue-800 capitalize">{profile?.role}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-400">Terdaftar</span><span className="text-white">{profile?.created_at ? new Date(profile.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-4)]">Username</span><span className="text-[var(--text-1)] font-medium">{profile?.username}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-4)]">Role</span><span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-900/50 text-blue-400 border border-blue-800 capitalize">{profile?.role}</span></div>
+                  <div className="flex justify-between"><span className="text-[var(--text-4)]">Terdaftar</span><span className="text-[var(--text-1)]">{profile?.created_at ? new Date(profile.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</span></div>
                 </div>
               </div>
               <form onSubmit={handleProfileSubmit} className="space-y-6">
-                <div className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                  <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><i className="fas fa-id-card text-gray-400"></i> Profil</h2>
-                  <label className="block text-gray-400 text-sm mb-2">Nama Lengkap</label>
-                  <input type="text" value={profileForm.full_name} onChange={(e) => setProfileForm(prev => ({ ...prev, full_name: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" />
+                <div className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                  <h2 className="text-lg font-bold text-[var(--text-1)] mb-4 flex items-center gap-2"><i className="fas fa-id-card text-[var(--text-4)]"></i> Profil</h2>
+                  <label className="block text-[var(--text-4)] text-sm mb-2">Nama Lengkap</label>
+                  <input type="text" value={profileForm.full_name} onChange={(e) => setProfileForm(prev => ({ ...prev, full_name: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" />
                 </div>
-                <div className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                  <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2"><i className="fas fa-lock text-gray-400"></i> Ubah Password</h2>
-                  <p className="text-gray-500 text-xs mb-4">Kosongkan jika tidak ingin mengubah password</p>
+                <div className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                  <h2 className="text-lg font-bold text-[var(--text-1)] mb-4 flex items-center gap-2"><i className="fas fa-lock text-[var(--text-4)]"></i> Ubah Password</h2>
+                  <p className="text-[var(--text-5)] text-xs mb-4">Kosongkan jika tidak ingin mengubah password</p>
                   <div className="space-y-4">
-                    <div><label className="block text-gray-400 text-sm mb-2">Password Lama</label><input type="password" value={profileForm.current_password} onChange={(e) => setProfileForm(prev => ({ ...prev, current_password: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
-                    <div><label className="block text-gray-400 text-sm mb-2">Password Baru</label><input type="password" value={profileForm.new_password} onChange={(e) => setProfileForm(prev => ({ ...prev, new_password: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
-                    <div><label className="block text-gray-400 text-sm mb-2">Konfirmasi Password Baru</label><input type="password" value={profileForm.confirm_password} onChange={(e) => setProfileForm(prev => ({ ...prev, confirm_password: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
+                    <div><label className="block text-[var(--text-4)] text-sm mb-2">Password Lama</label><input type="password" value={profileForm.current_password} onChange={(e) => setProfileForm(prev => ({ ...prev, current_password: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
+                    <div><label className="block text-[var(--text-4)] text-sm mb-2">Password Baru</label><input type="password" value={profileForm.new_password} onChange={(e) => setProfileForm(prev => ({ ...prev, new_password: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
+                    <div><label className="block text-[var(--text-4)] text-sm mb-2">Konfirmasi Password Baru</label><input type="password" value={profileForm.confirm_password} onChange={(e) => setProfileForm(prev => ({ ...prev, confirm_password: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
                   </div>
                 </div>
                 <button type="submit" disabled={savingProfile} className="btn-chrome px-8 py-3 rounded-md font-semibold text-sm disabled:opacity-50">
@@ -297,34 +297,34 @@ export default function AdminSettingsPage() {
 
           {activeTab === 'users' && (
             <div className="space-y-6">
-              <form onSubmit={handleUserSubmit} className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-bold text-white mb-4">{editingUser ? 'Edit User' : 'Tambah User Baru'}</h2>
+              <form onSubmit={handleUserSubmit} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                <h2 className="text-lg font-bold text-[var(--text-1)] mb-4">{editingUser ? 'Edit User' : 'Tambah User Baru'}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div><label className="block text-gray-400 text-sm mb-2">Username</label><input type="text" required value={userForm.username} onChange={(e) => setUserForm(prev => ({ ...prev, username: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
-                  <div><label className="block text-gray-400 text-sm mb-2">{editingUser ? 'Password Baru (kosongkan jika tidak ubah)' : 'Password'}</label><input type="password" value={userForm.password} onChange={(e) => setUserForm(prev => ({ ...prev, password: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" {...(!editingUser ? { required: true } : {})} /></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">Username</label><input type="text" required value={userForm.username} onChange={(e) => setUserForm(prev => ({ ...prev, username: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">{editingUser ? 'Password Baru (kosongkan jika tidak ubah)' : 'Password'}</label><input type="password" value={userForm.password} onChange={(e) => setUserForm(prev => ({ ...prev, password: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" {...(!editingUser ? { required: true } : {})} /></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div><label className="block text-gray-400 text-sm mb-2">Nama Lengkap</label><input type="text" value={userForm.full_name} onChange={(e) => setUserForm(prev => ({ ...prev, full_name: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
-                  <div><label className="block text-gray-400 text-sm mb-2">Role</label><select value={userForm.role} onChange={(e) => setUserForm(prev => ({ ...prev, role: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm">{roles.filter(r => r.is_active).map(r => (<option key={r.name} value={r.name}>{r.label}</option>))}</select></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">Nama Lengkap</label><input type="text" value={userForm.full_name} onChange={(e) => setUserForm(prev => ({ ...prev, full_name: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">Role</label><select value={userForm.role} onChange={(e) => setUserForm(prev => ({ ...prev, role: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm">{roles.filter(r => r.is_active).map(r => (<option key={r.name} value={r.name}>{r.label}</option>))}</select></div>
                 </div>
                 <div className="flex gap-3">
                   <button type="submit" disabled={savingUser} className="btn-chrome px-6 py-2.5 rounded-md font-semibold text-sm disabled:opacity-50">{savingUser ? <i className="fas fa-spinner fa-spin mr-2"></i> : null}{editingUser ? 'Update' : 'Tambah'} User</button>
-                  {editingUser && <button type="button" onClick={() => { setEditingUser(null); setUserForm({ username: '', password: '', full_name: '', role: 'editor', is_active: true }); }} className="px-6 py-2.5 rounded-md border border-gray-700 text-gray-300 hover:text-white transition-colors text-sm">Batal</button>}
+                  {editingUser && <button type="button" onClick={() => { setEditingUser(null); setUserForm({ username: '', password: '', full_name: '', role: 'editor', is_active: true }); }} className="px-6 py-2.5 rounded-md border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors text-sm">Batal</button>}
                 </div>
               </form>
 
               <div className="space-y-3">
                 {users.map(user => (
-                  <div key={user.id} className="bg-[#151518] rounded-xl border border-gray-800 p-4">
+                  <div key={user.id} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center"><i className="fas fa-user text-gray-400 text-sm"></i></div>
+                        <div className="w-10 h-10 rounded-full bg-[var(--surface-3)] border border-[var(--border-1)] flex items-center justify-center"><i className="fas fa-user text-[var(--text-4)] text-sm"></i></div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="text-white font-bold">{user.username}</h3>
-                            {profile?.id === user.id && <span className="text-xs text-gray-500">(Anda)</span>}
+                            <h3 className="text-[var(--text-1)] font-bold">{user.username}</h3>
+                            {profile?.id === user.id && <span className="text-xs text-[var(--text-5)]">(Anda)</span>}
                           </div>
-                          <p className="text-gray-500 text-xs">{user.full_name || 'Tanpa nama'}</p>
+                          <p className="text-[var(--text-5)] text-xs">{user.full_name || 'Tanpa nama'}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -332,7 +332,7 @@ export default function AdminSettingsPage() {
                         <span className={`text-xs ${user.is_active ? 'text-green-400' : 'text-red-400'}`}>{user.is_active ? 'Aktif' : 'Nonaktif'}</span>
                         {profile?.id !== user.id && (
                           <div className="flex gap-2">
-                            <button onClick={() => { setEditingUser(user); setUserForm({ username: user.username, password: '', full_name: user.full_name, role: user.role, is_active: user.is_active }); }} className="px-3 py-1.5 rounded border border-gray-700 text-gray-300 hover:text-white text-xs">Edit</button>
+                            <button onClick={() => { setEditingUser(user); setUserForm({ username: user.username, password: '', full_name: user.full_name, role: user.role, is_active: user.is_active }); }} className="px-3 py-1.5 rounded border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] text-xs">Edit</button>
                             <button onClick={() => handleUserToggle(user)} className={`px-3 py-1.5 rounded border text-xs ${user.is_active ? 'border-yellow-800 text-yellow-400 hover:bg-yellow-900/30' : 'border-green-800 text-green-400 hover:bg-green-900/30'}`}>{user.is_active ? 'Nonaktifkan' : 'Aktifkan'}</button>
                             <button onClick={() => handleUserDelete(user.id)} className="px-3 py-1.5 rounded border border-red-900 text-red-400 hover:bg-red-900/30 text-xs">Hapus</button>
                           </div>
@@ -341,40 +341,40 @@ export default function AdminSettingsPage() {
                     </div>
                   </div>
                 ))}
-                {users.length === 0 && <div className="text-center py-12 bg-[#151518] rounded-xl border border-gray-800"><p className="text-gray-400">Belum ada user.</p></div>}
+                {users.length === 0 && <div className="text-center py-12 bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)]"><p className="text-[var(--text-4)]">Belum ada user.</p></div>}
               </div>
             </div>
           )}
 
           {activeTab === 'roles' && (
             <div className="space-y-6">
-              <form onSubmit={handleRoleSubmit} className="bg-[#151518] rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-bold text-white mb-4">{editingRole ? 'Edit Role' : 'Tambah Role Baru'}</h2>
+              <form onSubmit={handleRoleSubmit} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6">
+                <h2 className="text-lg font-bold text-[var(--text-1)] mb-4">{editingRole ? 'Edit Role' : 'Tambah Role Baru'}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div><label className="block text-gray-400 text-sm mb-2">Role Name</label><input type="text" required value={roleForm.name} onChange={(e) => setRoleForm(prev => ({ ...prev, name: e.target.value.toLowerCase().replace(/\s+/g, '_') }))} placeholder="contoh: manager" disabled={!!editingRole} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm disabled:opacity-50" /></div>
-                  <div><label className="block text-gray-400 text-sm mb-2">Label</label><input type="text" required value={roleForm.label} onChange={(e) => setRoleForm(prev => ({ ...prev, label: e.target.value }))} placeholder="contoh: Manager" className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">Role Name</label><input type="text" required value={roleForm.name} onChange={(e) => setRoleForm(prev => ({ ...prev, name: e.target.value.toLowerCase().replace(/\s+/g, '_') }))} placeholder="contoh: manager" disabled={!!editingRole} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm disabled:opacity-50" /></div>
+                  <div><label className="block text-[var(--text-4)] text-sm mb-2">Label</label><input type="text" required value={roleForm.label} onChange={(e) => setRoleForm(prev => ({ ...prev, label: e.target.value }))} placeholder="contoh: Manager" className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
                 </div>
-                <div className="mb-4"><label className="block text-gray-400 text-sm mb-2">Deskripsi</label><input type="text" value={roleForm.description} onChange={(e) => setRoleForm(prev => ({ ...prev, description: e.target.value }))} placeholder="Deskripsi role ini..." className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" /></div>
+                <div className="mb-4"><label className="block text-[var(--text-4)] text-sm mb-2">Deskripsi</label><input type="text" value={roleForm.description} onChange={(e) => setRoleForm(prev => ({ ...prev, description: e.target.value }))} placeholder="Deskripsi role ini..." className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" /></div>
 
                 <div className="mb-6">
-                  <label className="block text-gray-400 text-sm mb-3 font-medium">Hak Akses per Menu CMS</label>
+                  <label className="block text-[var(--text-4)] text-sm mb-3 font-medium">Hak Akses per Menu CMS</label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {CMS_SECTIONS.map(sec => {
                       const currentPerm = roleForm.permissions[sec.key] || 'none';
                       return (
-                        <div key={sec.key} className="flex items-center justify-between bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 hover:border-gray-700 transition-colors">
-                          <span className="text-gray-300 text-sm">{sec.label}</span>
+                        <div key={sec.key} className="flex items-center justify-between bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 hover:border-[var(--border-2)] transition-colors">
+                          <span className="text-[var(--text-3)] text-sm">{sec.label}</span>
                           <div className="relative">
                             <select
                               value={currentPerm}
                               onChange={(e) => updateRolePermission(sec.key, e.target.value)}
-                              className="appearance-none bg-[#151518] border border-gray-700 rounded-md px-3 py-1.5 pr-8 text-xs text-gray-200 focus:outline-none focus:border-gray-500 cursor-pointer hover:border-gray-600 transition-colors"
+                              className="appearance-none bg-[var(--surface-2)] border border-[var(--border-1)] rounded-md px-3 py-1.5 pr-8 text-xs text-[var(--text-2)] focus:outline-none focus:border-[var(--text-5)] cursor-pointer hover:border-[var(--text-5)] transition-colors"
                             >
                               {PERM_OPTIONS.map(o => (
                                 <option key={o.value} value={o.value}>{o.label}</option>
                               ))}
                             </select>
-                            <i className="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-gray-500 pointer-events-none"></i>
+                            <i className="fas fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-[var(--text-5)] pointer-events-none"></i>
                           </div>
                         </div>
                       );
@@ -384,24 +384,24 @@ export default function AdminSettingsPage() {
 
                 <div className="flex gap-3">
                   <button type="submit" disabled={savingRole} className="btn-chrome px-6 py-2.5 rounded-md font-semibold text-sm disabled:opacity-50">{savingRole ? <i className="fas fa-spinner fa-spin mr-2"></i> : null}{editingRole ? 'Update' : 'Tambah'} Role</button>
-                  {editingRole && <button type="button" onClick={() => { setEditingRole(null); setRoleForm({ name: '', label: '', description: '', permissions: {}, is_active: true }); }} className="px-6 py-2.5 rounded-md border border-gray-700 text-gray-300 hover:text-white transition-colors text-sm">Batal</button>}
+                  {editingRole && <button type="button" onClick={() => { setEditingRole(null); setRoleForm({ name: '', label: '', description: '', permissions: {}, is_active: true }); }} className="px-6 py-2.5 rounded-md border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors text-sm">Batal</button>}
                 </div>
               </form>
 
               <div className="space-y-3">
                 {roles.map(role => (
-                  <div key={role.id} className="bg-[#151518] rounded-xl border border-gray-800 p-4">
+                  <div key={role.id} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center"><i className="fas fa-user-shield text-gray-400 text-sm"></i></div>
+                        <div className="w-10 h-10 rounded-full bg-[var(--surface-3)] border border-[var(--border-1)] flex items-center justify-center"><i className="fas fa-user-shield text-[var(--text-4)] text-sm"></i></div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <h3 className="text-white font-bold">{role.label}</h3>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-gray-300">{role.name}</span>
+                            <h3 className="text-[var(--text-1)] font-bold">{role.label}</h3>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-[var(--text-3)]">{role.name}</span>
                             {!role.is_active && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/10 text-red-400">Nonaktif</span>}
-                            {(role.name === 'admin' || role.name === 'editor') && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-500">Default</span>}
+                            {(role.name === 'admin' || role.name === 'editor') && <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-[var(--text-5)]">Default</span>}
                           </div>
-                          <p className="text-gray-500 text-xs mt-1">{role.description || '—'}</p>
+                          <p className="text-[var(--text-5)] text-xs mt-1">{role.description || '—'}</p>
                           <div className="flex flex-wrap gap-1 mt-2">
                             {CMS_SECTIONS.filter(s => role.permissions[s.key] && role.permissions[s.key] !== 'none').map(s => (
                               <span key={s.key} className={`text-[10px] px-1.5 py-0.5 rounded ${role.permissions[s.key] === 'write' ? 'bg-green-900/50 text-green-400' : 'bg-yellow-900/50 text-yellow-400'}`}>{s.label}</span>
@@ -410,9 +410,9 @@ export default function AdminSettingsPage() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleRoleToggle(role)} className={`w-10 h-6 rounded-full transition-colors relative ${role.is_active ? 'bg-green-600' : 'bg-gray-700'}`}><div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${role.is_active ? 'translate-x-5' : 'translate-x-1'}`}></div></button>
-                        <button onClick={() => { setEditingRole(role); setRoleForm({ name: role.name, label: role.label, description: role.description, permissions: role.permissions, is_active: !!role.is_active }); }} className="w-10 h-10 rounded-lg border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-gray-600 transition-colors"><i className="fas fa-pen text-xs"></i></button>
-                        {role.name !== 'admin' && role.name !== 'editor' && <button onClick={() => handleRoleDelete(role.id)} className="w-10 h-10 rounded-lg border border-gray-800 flex items-center justify-center text-gray-400 hover:text-red-400 hover:border-red-600 transition-colors"><i className="fas fa-trash text-xs"></i></button>}
+                        <button onClick={() => handleRoleToggle(role)} className={`w-10 h-6 rounded-full transition-colors relative ${role.is_active ? 'bg-green-600' : 'bg-[var(--surface-3)]'}`}><div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${role.is_active ? 'translate-x-5' : 'translate-x-1'}`}></div></button>
+                        <button onClick={() => { setEditingRole(role); setRoleForm({ name: role.name, label: role.label, description: role.description, permissions: role.permissions, is_active: !!role.is_active }); }} className="w-10 h-10 rounded-lg border border-[var(--border-1)] flex items-center justify-center text-[var(--text-4)] hover:text-[var(--text-1)] hover:border-[var(--text-5)] transition-colors"><i className="fas fa-pen text-xs"></i></button>
+                        {role.name !== 'admin' && role.name !== 'editor' && <button onClick={() => handleRoleDelete(role.id)} className="w-10 h-10 rounded-lg border border-[var(--border-1)] flex items-center justify-center text-[var(--text-4)] hover:text-red-400 hover:border-red-600 transition-colors"><i className="fas fa-trash text-xs"></i></button>}
                       </div>
                     </div>
                   </div>

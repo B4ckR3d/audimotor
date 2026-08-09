@@ -113,8 +113,8 @@ export default function EditCarPage() {
     return (
       <>
         <Navbar />
-        <main className="flex-1 pt-32 pb-20 bg-[#0a0a0c] flex items-center justify-center">
-          <i className="fas fa-spinner fa-spin text-3xl text-gray-500"></i>
+        <main className="flex-1 pt-32 pb-20 bg-[var(--surface-1)] flex items-center justify-center">
+          <i className="fas fa-spinner fa-spin text-3xl text-[var(--text-5)]"></i>
         </main>
         <Footer />
       </>
@@ -125,43 +125,43 @@ export default function EditCarPage() {
     <PermissionGuard section="cars" action="write">
     <>
       <Navbar />
-      <main className="flex-1 pt-32 pb-20 bg-[#0a0a0c]">
+      <main className="flex-1 pt-32 pb-20 bg-[var(--surface-1)]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Link href="/admin" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+          <Link href="/admin" className="inline-flex items-center gap-2 text-[var(--text-4)] hover:text-[var(--text-1)] mb-8 transition-colors">
             <i className="fas fa-arrow-left"></i> Kembali ke Dashboard
           </Link>
 
-          <h1 className="text-3xl font-display font-bold text-white mb-8">Edit Mobil</h1>
+          <h1 className="text-3xl font-display font-bold text-[var(--text-1)] mb-8">Edit Mobil</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Merek *</label>
-                <input type="text" required value={form.brand} onChange={(e) => updateField('brand', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Merek *</label>
+                <input type="text" required value={form.brand} onChange={(e) => updateField('brand', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Nama Model *</label>
-                <input type="text" required value={form.name} onChange={(e) => updateField('name', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Nama Model *</label>
+                <input type="text" required value={form.name} onChange={(e) => updateField('name', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Varian</label>
-                <input type="text" value={form.model} onChange={(e) => updateField('model', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Varian</label>
+                <input type="text" value={form.model} onChange={(e) => updateField('model', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Tahun *</label>
-                <input type="number" required min={2000} max={2030} value={form.year} onChange={(e) => updateField('year', Number(e.target.value))} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Tahun *</label>
+                <input type="number" required min={2000} max={2030} value={form.year} onChange={(e) => updateField('year', Number(e.target.value))} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Harga (Rp) *</label>
-                <input type="number" required min={0} value={form.price} onChange={(e) => updateField('price', Number(e.target.value))} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Harga (Rp) *</label>
+                <input type="number" required min={0} value={form.price} onChange={(e) => updateField('price', Number(e.target.value))} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Kilometer *</label>
-                <input type="number" required min={0} value={form.mileage} onChange={(e) => updateField('mileage', Number(e.target.value))} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Kilometer *</label>
+                <input type="number" required min={0} value={form.mileage} onChange={(e) => updateField('mileage', Number(e.target.value))} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Transmisi</label>
-                <select value={form.transmission} onChange={(e) => updateField('transmission', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors">
+                <label className="block text-[var(--text-4)] text-sm mb-2">Transmisi</label>
+                <select value={form.transmission} onChange={(e) => updateField('transmission', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors">
                   <option>Automatic</option>
                   <option>Manual</option>
                   <option>CVT</option>
@@ -169,8 +169,8 @@ export default function EditCarPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Bahan Bakar</label>
-                <select value={form.fuel} onChange={(e) => updateField('fuel', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors">
+                <label className="block text-[var(--text-4)] text-sm mb-2">Bahan Bakar</label>
+                <select value={form.fuel} onChange={(e) => updateField('fuel', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors">
                   <option>Bensin</option>
                   <option>Diesel</option>
                   <option>Hybrid</option>
@@ -178,12 +178,12 @@ export default function EditCarPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Warna</label>
-                <input type="text" value={form.color} onChange={(e) => updateField('color', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Warna</label>
+                <input type="text" value={form.color} onChange={(e) => updateField('color', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Status</label>
-                <select value={form.status} onChange={(e) => updateField('status', e.target.value)} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors">
+                <label className="block text-[var(--text-4)] text-sm mb-2">Status</label>
+                <select value={form.status} onChange={(e) => updateField('status', e.target.value)} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors">
                   <option value="available">Tersedia</option>
                   <option value="sold">Terjual</option>
                   <option value="featured">Featured</option>
@@ -191,11 +191,9 @@ export default function EditCarPage() {
               </div>
             </div>
 
-            {/* Image Upload Section */}
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Gambar Mobil</label>
+              <label className="block text-[var(--text-4)] text-sm mb-2">Gambar Mobil</label>
               <div className="flex flex-col gap-4">
-                {/* Upload Button */}
                 <div className="flex items-center gap-3">
                   <input
                     ref={fileInputRef}
@@ -211,7 +209,7 @@ export default function EditCarPage() {
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#1a1a1e] border border-gray-700 rounded-lg text-gray-300 hover:text-white hover:border-gray-500 transition-colors text-sm disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg text-[var(--text-3)] hover:text-[var(--text-1)] hover:border-[var(--text-5)] transition-colors text-sm disabled:opacity-50"
                   >
                     {uploading ? (
                       <i className="fas fa-spinner fa-spin"></i>
@@ -220,25 +218,23 @@ export default function EditCarPage() {
                     )}
                     {uploading ? 'Mengupload...' : 'Upload Gambar'}
                   </button>
-                  <span className="text-gray-500 text-xs">atau paste URL di bawah</span>
+                  <span className="text-[var(--text-5)] text-xs">atau paste URL di bawah</span>
                 </div>
 
-                {/* URL Input (fallback) */}
                 <input
                   type="text"
                   value={form.image_url}
                   onChange={(e) => updateField('image_url', e.target.value)}
-                  className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm"
+                  className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm"
                   placeholder="https://images.unsplash.com/..."
                 />
 
-                {/* Image Preview */}
                 {form.image_url && (
                   <div className="relative">
                     <img
                       src={form.image_url}
                       alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg border border-gray-800"
+                      className="w-full h-48 object-cover rounded-lg border border-[var(--border-1)]"
                       onError={(e) => {
                         (e.target as HTMLImageElement).style.display = 'none';
                       }}
@@ -256,13 +252,13 @@ export default function EditCarPage() {
             </div>
 
             <div>
-              <label className="block text-gray-400 text-sm mb-2">Deskripsi</label>
-              <textarea value={form.description} onChange={(e) => updateField('description', e.target.value)} rows={4} className="w-full bg-[#151518] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors" />
+              <label className="block text-[var(--text-4)] text-sm mb-2">Deskripsi</label>
+              <textarea value={form.description} onChange={(e) => updateField('description', e.target.value)} rows={4} className="w-full bg-[var(--surface-2)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors" />
             </div>
 
             <div className="flex items-center gap-3">
-              <input type="checkbox" id="is_featured" checked={form.is_featured} onChange={(e) => updateField('is_featured', e.target.checked)} className="w-4 h-4 rounded border-gray-700 bg-[#151518]" />
-              <label htmlFor="is_featured" className="text-gray-300 text-sm">Tandai sebagai Featured</label>
+              <input type="checkbox" id="is_featured" checked={form.is_featured} onChange={(e) => updateField('is_featured', e.target.checked)} className="w-4 h-4 rounded border-[var(--border-1)] bg-[var(--surface-2)]" />
+              <label htmlFor="is_featured" className="text-[var(--text-3)] text-sm">Tandai sebagai Featured</label>
             </div>
 
             <div className="flex gap-4 pt-4">
@@ -270,7 +266,7 @@ export default function EditCarPage() {
                 {saving ? <i className="fas fa-spinner fa-spin mr-2"></i> : null}
                 {saving ? 'Menyimpan...' : 'Simpan Perubahan'}
               </button>
-              <Link href="/admin" className="px-8 py-3 rounded-md border border-gray-700 text-gray-300 hover:text-white transition-colors text-sm">
+              <Link href="/admin" className="px-8 py-3 rounded-md border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors text-sm">
                 Batal
               </Link>
             </div>

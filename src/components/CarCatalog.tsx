@@ -3,23 +3,27 @@
 import { useState } from 'react';
 import { Car } from '@/types';
 import CarGrid from './CarGrid';
+import { useLang } from '@/contexts/LanguageContext';
 
 interface CarCatalogProps {
   cars: Car[];
 }
 
+const ALL = 'all';
+
 export default function CarCatalog({ cars }: CarCatalogProps) {
-  const [selectedBrand, setSelectedBrand] = useState('Semua');
+  const { t } = useLang();
+  const [selectedBrand, setSelectedBrand] = useState(ALL);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const brands = ['Semua', ...Array.from(new Set(cars.map((c) => c.brand)))].sort((a, b) => {
-    if (a === 'Semua') return -1;
-    if (b === 'Semua') return 1;
+  const brands = [ALL, ...Array.from(new Set(cars.map((c) => c.brand)))].sort((a, b) => {
+    if (a === ALL) return -1;
+    if (b === ALL) return 1;
     return a.localeCompare(b);
   });
 
   const filteredCars = cars.filter((car) => {
-    const matchBrand = selectedBrand === 'Semua' || car.brand === selectedBrand;
+    const matchBrand = selectedBrand === ALL || car.brand === selectedBrand;
     const matchSearch =
       searchQuery === '' ||
       car.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -34,19 +38,19 @@ export default function CarCatalog({ cars }: CarCatalogProps) {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10">
         {/* Search bar */}
         <div className="relative flex-1 w-full max-w-md">
-          <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-600 text-sm"></i>
+          <i className="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-4)] text-sm"></i>
           <input
             type="text"
-            placeholder="Cari merek atau model..."
+            placeholder={t('catalog.search')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#151518] border border-gray-800 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-gray-500 transition-colors"
+            className="w-full pl-11 pr-4 py-3 rounded-xl bg-[var(--surface-card)] border border-[var(--border-1)] text-sm text-[var(--text-1)] placeholder-[var(--text-4)] focus:outline-none focus:border-gray-500 transition-colors"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-white transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-4)] hover:text-[var(--text-1)] transition-colors"
             >
               <i className="fas fa-times text-xs"></i>
             </button>
@@ -63,10 +67,10 @@ export default function CarCatalog({ cars }: CarCatalogProps) {
               className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 ${
                 selectedBrand === brand
                   ? 'bg-white text-black'
-                  : 'bg-[#151518] text-gray-400 border border-gray-800 hover:border-gray-600 hover:text-white'
+                  : 'bg-[var(--surface-card)] text-[var(--text-4)] border border-[var(--border-1)] hover:border-gray-600 hover:text-[var(--text-1)]'
               }`}
             >
-              {brand}
+              {brand === ALL ? t('catalog.all') : brand}
             </button>
           ))}
         </div>
@@ -74,14 +78,10 @@ export default function CarCatalog({ cars }: CarCatalogProps) {
 
       {/* Results count */}
       {filteredCars.length > 0 && (
-        <p className="text-gray-600 text-sm mb-6">
-          Menampilkan <span className="text-gray-400">{filteredCars.length}</span> unit
-          {selectedBrand !== 'Semua' && (
-            <span> dari <span className="text-gray-400">{selectedBrand}</span></span>
-          )}
-          {searchQuery && (
-            <span> untuk &ldquo;<span className="text-gray-400">{searchQuery}</span>&rdquo;</span>
-          )}
+        <p className="text-[var(--text-4)] text-sm mb-6">
+          {t('catalog.showing')
+            .replace('{shown}', filteredCars.length.toString())
+            .replace('{total}', cars.length.toString())}
         </p>
       )}
 

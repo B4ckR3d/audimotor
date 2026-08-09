@@ -75,50 +75,50 @@ export default function CmsContactPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-[#0a0a0c]">
+      <div className="flex min-h-screen bg-[var(--surface-1)]">
         <AdminSidebar />
         <main className="flex-1 flex items-center justify-center">
-          <i className="fas fa-spinner fa-spin text-3xl text-gray-500"></i>
+          <i className="fas fa-spinner fa-spin text-3xl text-[var(--text-5)]"></i>
         </main>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0c]">
+    <div className="flex min-h-screen bg-[var(--surface-1)]">
       <AdminSidebar />
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-4xl">
-          <h1 className="text-3xl font-display font-bold text-white mb-2">Kontak</h1>
-          <p className="text-gray-400 text-sm mb-8">Kelola informasi kontak showroom</p>
+          <h1 className="text-3xl font-display font-bold text-[var(--text-1)] mb-2">Kontak</h1>
+          <p className="text-[var(--text-4)] text-sm mb-8">Kelola informasi kontak showroom</p>
 
-          <form onSubmit={handleSubmit} className="bg-[#151518] rounded-xl border border-gray-800 p-6 mb-8">
-            <h2 className="text-lg font-bold text-white mb-4">{editing ? 'Edit Kontak' : 'Tambah Kontak Baru'}</h2>
+          <form onSubmit={handleSubmit} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-6 mb-8">
+            <h2 className="text-lg font-bold text-[var(--text-1)] mb-4">{editing ? 'Edit Kontak' : 'Tambah Kontak Baru'}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Jenis Kontak</label>
-                <select value={form.contact_type} onChange={(e) => setForm(prev => ({ ...prev, contact_type: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm">
+                <label className="block text-[var(--text-4)] text-sm mb-2">Jenis Kontak</label>
+                <select value={form.contact_type} onChange={(e) => setForm(prev => ({ ...prev, contact_type: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm">
                   {contactTypes.map(ct => <option key={ct.value} value={ct.value}>{ct.label}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Label</label>
-                <input type="text" value={form.label} onChange={(e) => setForm(prev => ({ ...prev, label: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" placeholder="Kantor Pusat" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Label</label>
+                <input type="text" value={form.label} onChange={(e) => setForm(prev => ({ ...prev, label: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" placeholder="Kantor Pusat" />
               </div>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-400 text-sm mb-2">Nilai Kontak</label>
-              <input type="text" required value={form.contact_value} onChange={(e) => setForm(prev => ({ ...prev, contact_value: e.target.value }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" placeholder="021-555-0123" />
+              <label className="block text-[var(--text-4)] text-sm mb-2">Nilai Kontak</label>
+              <input type="text" required value={form.contact_value} onChange={(e) => setForm(prev => ({ ...prev, contact_value: e.target.value }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" placeholder="021-555-0123" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Urutan</label>
-                <input type="number" value={form.sort_order} onChange={(e) => setForm(prev => ({ ...prev, sort_order: Number(e.target.value) }))} className="w-full bg-[#0a0a0c] border border-gray-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gray-500 transition-colors text-sm" />
+                <label className="block text-[var(--text-4)] text-sm mb-2">Urutan</label>
+                <input type="number" value={form.sort_order} onChange={(e) => setForm(prev => ({ ...prev, sort_order: Number(e.target.value) }))} className="w-full bg-[var(--surface-1)] border border-[var(--border-1)] rounded-lg px-4 py-3 text-[var(--text-1)] focus:outline-none focus:border-[var(--text-5)] transition-colors text-sm" />
               </div>
               <div className="flex items-end">
                 <label className="flex items-center gap-3 cursor-pointer">
-                  <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(prev => ({ ...prev, is_active: e.target.checked }))} className="w-4 h-4 rounded border-gray-700 bg-[#0a0a0c]" />
-                  <span className="text-gray-300 text-sm">Aktif</span>
+                  <input type="checkbox" checked={form.is_active} onChange={(e) => setForm(prev => ({ ...prev, is_active: e.target.checked }))} className="w-4 h-4 rounded border-[var(--border-2)] bg-[var(--surface-1)]" />
+                  <span className="text-[var(--text-3)] text-sm">Aktif</span>
                 </label>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function CmsContactPage() {
                 {editing ? 'Update' : 'Tambah'} Kontak
               </button>
               {editing && (
-                <button type="button" onClick={() => { setEditing(null); setForm({ contact_type: 'address', contact_value: '', label: '', is_active: true, sort_order: 0 }); }} className="px-6 py-2.5 rounded-md border border-gray-700 text-gray-300 hover:text-white transition-colors text-sm">
+                <button type="button" onClick={() => { setEditing(null); setForm({ contact_type: 'address', contact_value: '', label: '', is_active: true, sort_order: 0 }); }} className="px-6 py-2.5 rounded-md border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors text-sm">
                   Batal
                 </button>
               )}
@@ -139,28 +139,28 @@ export default function CmsContactPage() {
             {contacts.map(c => {
               const ct = contactTypes.find(t => t.value === c.contact_type);
               return (
-                <div key={c.id} className="bg-[#151518] rounded-xl border border-gray-800 p-4 flex items-center justify-between">
+                <div key={c.id} className="bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)] p-4 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center">
-                      <i className={`fas ${ct?.icon || 'fa-info-circle'} text-gray-300`}></i>
+                    <div className="w-12 h-12 bg-[var(--surface-3)] rounded-full flex items-center justify-center">
+                      <i className={`fas ${ct?.icon || 'fa-info-circle'} text-[var(--text-3)]`}></i>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs">{ct?.label || c.contact_type} {c.label && `- ${c.label}`}</p>
-                      <p className="text-white font-medium">{c.contact_value}</p>
+                      <p className="text-[var(--text-5)] text-xs">{ct?.label || c.contact_type} {c.label && `- ${c.label}`}</p>
+                      <p className="text-[var(--text-1)] font-medium">{c.contact_value}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs ${c.is_active ? 'text-green-400' : 'text-red-400'}`}>{c.is_active ? 'Aktif' : 'Nonaktif'}</span>
-                    <button onClick={() => { setEditing(c); setForm({ contact_type: c.contact_type, contact_value: c.contact_value, label: c.label, is_active: c.is_active, sort_order: c.sort_order }); }} className="px-3 py-1.5 rounded border border-gray-700 text-gray-300 hover:text-white text-xs">Edit</button>
+                    <button onClick={() => { setEditing(c); setForm({ contact_type: c.contact_type, contact_value: c.contact_value, label: c.label, is_active: c.is_active, sort_order: c.sort_order }); }} className="px-3 py-1.5 rounded border border-[var(--border-1)] text-[var(--text-3)] hover:text-[var(--text-1)] text-xs">Edit</button>
                     <button onClick={() => handleDelete(c.id)} className="px-3 py-1.5 rounded border border-red-900 text-red-400 hover:bg-red-900/30 text-xs">Hapus</button>
                   </div>
                 </div>
               );
             })}
             {contacts.length === 0 && (
-              <div className="text-center py-12 bg-[#151518] rounded-xl border border-gray-800">
-                <i className="fas fa-phone text-4xl text-gray-600 mb-4"></i>
-                <p className="text-gray-400">Belum ada kontak. Tambahkan kontak pertama!</p>
+              <div className="text-center py-12 bg-[var(--surface-2)] rounded-xl border border-[var(--border-1)]">
+                <i className="fas fa-phone text-4xl text-[var(--text-5)] mb-4"></i>
+                <p className="text-[var(--text-4)]">Belum ada kontak. Tambahkan kontak pertama!</p>
               </div>
             )}
           </div>

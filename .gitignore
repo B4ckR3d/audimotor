@@ -63,3 +63,8 @@ memory.md
 PRD.md
 README.md
 TASKS.md
+*.log
+_build.js
+_write.js
+write-helper.js
+
