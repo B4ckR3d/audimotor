@@ -1,6 +1,7 @@
-﻿module.exports = {
+module.exports = {
   apps: [{
     name: 'audi-motor',
+    cwd: __dirname,
     script: 'node_modules/next/dist/bin/next',
     args: 'start',
     env: {
