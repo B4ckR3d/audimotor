@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
@@ -306,7 +306,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'cms.startDate': 'Tanggal Mulai',
     'cms.endDate': 'Tanggal Berakhir',
     'cms.promoImage': 'Gambar Promosi',
-    'cms.contact': 'Kontak',
     'cms.contactDesc': 'Kelola informasi kontak showroom',
     'cms.addContact': 'Tambah Kontak Baru',
     'cms.editContact': 'Edit Kontak',
@@ -319,7 +318,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'cms.typeEmail': 'Email',
     'cms.typeFax': 'Fax',
     'cms.typeOther': 'Lainnya',
-    'cms.social': 'Social Media',
     'cms.socialDesc': 'Kelola link media sosial showroom',
     'cms.addSocial': 'Tambah Social Link Baru',
     'cms.editSocial': 'Edit Social Link',
@@ -339,24 +337,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'perm.loading': 'Memuat...',
     'perm.denied': 'Akses Ditolak',
     'perm.noAccess': 'Anda tidak memiliki izin untuk mengakses halaman ini.',
-
-    /* -- Cars Page -- */
-    'cars.title': 'Koleksi Lengkap',
-    'cars.subtitle': 'Temukan mobil impian keluarga Anda dari koleksi premium kami',
-    'cars.units': 'Unit Tersedia',
-    'cars.search': 'Cari merek, model...',
-    'cars.brand': 'Merek:',
-    'cars.all': 'Semua',
-    'cars.found': 'unit ditemukan',
-    'cars.empty': 'Tidak ada mobil ditemukan',
-    'cars.empty.sub': 'Coba ubah filter atau kata kunci pencarian',
-    'cars.sort.newest': 'Terbaru',
-    'cars.sort.priceAsc': 'Harga Terendah',
-    'cars.sort.priceDesc': 'Harga Tertinggi',
-    'cars.sort.yearDesc': 'Tahun Terbaru',
-    'cars.sort.yearAsc': 'Tahun Terlama',
-    'cars.detail': 'Detail',
-    'cars.wa': 'WA',
   },
   en: {
     /* -- Navbar -- */
@@ -401,7 +381,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'car.description': 'Description',
     'car.back': 'Back to Collection',
     'car.whatsapp': 'Ask via WhatsApp',
-        'car.whatsapp': 'Ask via WhatsApp',
     'car.phone': 'Call Showroom',
 
     /* -- Cars Page -- */
@@ -653,7 +632,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'cms.startDate': 'Start Date',
     'cms.endDate': 'End Date',
     'cms.promoImage': 'Promotion Image',
-    'cms.contact': 'Contact',
     'cms.contactDesc': 'Manage showroom contact information',
     'cms.addContact': 'Add New Contact',
     'cms.editContact': 'Edit Contact',
@@ -666,7 +644,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'cms.typeEmail': 'Email',
     'cms.typeFax': 'Fax',
     'cms.typeOther': 'Other',
-    'cms.social': 'Social Media',
     'cms.socialDesc': 'Manage showroom social media links',
     'cms.addSocial': 'Add New Social Link',
     'cms.editSocial': 'Edit Social Link',
@@ -686,24 +663,6 @@ const dict: Record<Lang, Record<string, string>> = {
     'perm.loading': 'Loading...',
     'perm.denied': 'Access Denied',
     'perm.noAccess': 'You do not have permission to access this page.',
-
-    /* -- Cars Page -- */
-    'cars.title': 'Full Collection',
-    'cars.subtitle': 'Find your dream family car from our premium collection',
-    'cars.units': 'Available Units',
-    'cars.search': 'Search brand, model...',
-    'cars.brand': 'Brand:',
-    'cars.all': 'All',
-    'cars.found': 'units found',
-    'cars.empty': 'No cars found',
-    'cars.empty.sub': 'Try changing filters or search keywords',
-    'cars.sort.newest': 'Newest',
-    'cars.sort.priceAsc': 'Lowest Price',
-    'cars.sort.priceDesc': 'Highest Price',
-    'cars.sort.yearDesc': 'Newest Year',
-    'cars.sort.yearAsc': 'Oldest Year',
-    'cars.detail': 'Detail',
-    'cars.wa': 'WA',
   },
 };
 

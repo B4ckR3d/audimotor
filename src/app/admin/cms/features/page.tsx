@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import AdminSidebar from '@/components/AdminSidebar';
@@ -79,7 +79,7 @@ export default function CmsFeaturesPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Yakin ingin menghapus fitur ini?')) return;
     try {
-      await fetch(/api/admin/features?id=, { method: 'DELETE' });
+      await fetch(`/api/admin/features?id=${id}`, { method: 'DELETE' });
       fetchFeatures();
     } catch {
       alert('Gagal menghapus fitur');
