@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
@@ -34,7 +34,7 @@ const defaultHero: HeroData = {
 };
 
 export default function Hero() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
   const [hero, setHero] = useState<HeroData>(defaultHero);
   const [slides, setSlides] = useState<CarSlide[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -70,6 +70,12 @@ export default function Hero() {
 
   const goToSlide = useCallback((i: number) => setCurrentSlide(i), []);
 
+  const badgeText = lang === 'en' ? t('hero.badge') : (hero.badge || t('hero.badge'));
+  const titleText = lang === 'en' ? t('hero.title') : (hero.title || t('hero.title'));
+  const subtitleText = lang === 'en' ? t('hero.subtitle') : (hero.subtitle || t('hero.subtitle'));
+  const primaryBtnText = lang === 'en' ? t('hero.btn.collection') : (hero.button_primary_text || t('hero.btn.collection'));
+  const secondaryBtnText = lang === 'en' ? t('hero.btn.consult') : (hero.button_secondary_text || t('hero.btn.consult'));
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -103,12 +109,12 @@ export default function Hero() {
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
             <span className="text-[10px] text-[var(--text-3)] font-medium tracking-[0.2em] uppercase">
-              {hero.badge}
+              {badgeText}
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold leading-[1.1] mb-8 text-[var(--text-1)] whitespace-pre-line">
-            {hero.title.split(' ').map((word, i) => (
+            {titleText.split(' ').map((word, i) => (
               <span
                 key={i}
                 className="inline-block mr-[0.25em] transition-all duration-700"
@@ -129,7 +135,7 @@ export default function Hero() {
             }`}
             style={{ transitionDelay: '600ms' }}
           >
-            {hero.subtitle}
+            {subtitleText}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -140,7 +146,7 @@ export default function Hero() {
               }`}
               style={{ transitionDelay: '800ms' }}
             >
-              {hero.button_primary_text} <i className="fas fa-arrow-right text-[10px]"></i>
+              {primaryBtnText} <i className="fas fa-arrow-right text-[10px]"></i>
             </Link>
             <a
               href={hero.button_secondary_link}
@@ -151,11 +157,12 @@ export default function Hero() {
               }`}
               style={{ transitionDelay: '900ms' }}
             >
-              <i className="fab fa-whatsapp text-green-500 text-base"></i> {hero.button_secondary_text}
+              <i className="fab fa-whatsapp text-green-500 text-base"></i> {secondaryBtnText}
             </a>
           </div>
         </div>
       </div>
+
 
       {slides.length > 1 && (
         <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-2">
