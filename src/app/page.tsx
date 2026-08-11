@@ -12,6 +12,8 @@ import ShowroomMapSection from '@/components/ShowroomMapSection';
 import prisma from '@/lib/prisma';
 import { Car } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 async function getCars(): Promise<Car[]> {
   try {
     const rows = await prisma.car.findMany({
