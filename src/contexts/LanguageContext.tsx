@@ -80,13 +80,13 @@ const dict: Record<Lang, Record<string, string>> = {
     'features.title': 'Standar Premium Kami',
     'features.1.title': 'Inspeksi Ketat',
     'features.1.desc':
-      'Setiap unit melewati 65 titik pemeriksaan menyeluruh oleh teknisi ahli kami. Dari kondisi mesin, transmisi, hingga interior Â— tidak ada yang terlewat.',
+      'Setiap unit melewati 65 titik pemeriksaan menyeluruh oleh teknisi ahli kami. Dari kondisi mesin, transmisi, hingga interior — tidak ada yang terlewat.',
     'features.2.title': 'Dokumen Terjamin',
     'features.2.desc':
       'BPKB, STNK, dan faktur asli lengkap. Kami urus proses balik nama hingga selesai. Bebas sengketa dan siap pakai untuk keluarga Anda.',
     'features.3.title': 'Harga Transparan',
     'features.3.desc':
-      'Harga yang tercantum adalah harga final Â— tanpa biaya tersembunyi. Dapatkan penawaran terbaik dengan promo cicilan 0% melalui mitra pembiayaan kami.',
+      'Harga yang tercantum adalah harga final — tanpa biaya tersembunyi. Dapatkan penawaran terbaik dengan promo cicilan 0% melalui mitra pembiayaan kami.',
 
     /* -- Testimonials -- */
     'testimonials.title': 'Apa Kata Pelanggan Kami',
@@ -406,13 +406,13 @@ const dict: Record<Lang, Record<string, string>> = {
     'features.title': 'Our Premium Standards',
     'features.1.title': 'Strict Inspection',
     'features.1.desc':
-      'Each unit undergoes 65 comprehensive checkpoints by our expert technicians. From engine condition, transmission, to interior Â— nothing is missed.',
+      'Each unit undergoes 65 comprehensive checkpoints by our expert technicians. From engine condition, transmission, to interior — nothing is missed.',
     'features.2.title': 'Guaranteed Documents',
     'features.2.desc':
       'Complete original BPKB, STNK, and invoices. We handle the name transfer process until completion. Dispute-free and ready for your family.',
     'features.3.title': 'Transparent Pricing',
     'features.3.desc':
-      'The listed price is the final price Â— no hidden fees. Get the best deals with 0% installment promos through our financing partners.',
+      'The listed price is the final price — no hidden fees. Get the best deals with 0% installment promos through our financing partners.',
 
     /* -- Testimonials -- */
     'testimonials.title': 'What Our Customers Say',
