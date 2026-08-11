@@ -33,9 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-# uploads (runtime, jangan di-track)
-public/uploads/
-!public/uploads/.gitkeep
+# uploads
+# public/uploads/
+# !public/uploads/.gitkeep
 
 # vercel
 .vercel
@@ -47,13 +47,13 @@ next-env.d.ts
 *.md
 cred.md
 
-# Database SQLite (runtime, jangan di-track)
-data/audi-motor.db
-data/audi-motor.db-shm
-data/audi-motor.db-wal
-database.db
-database.db-shm
-database.db-wal
+# Database SQLite
+# data/audi-motor.db
+# data/audi-motor.db-shm
+# data/audi-motor.db-wal
+# database.db
+# database.db-shm
+# database.db-wal
 
 wiki/
 AGENTS.md
