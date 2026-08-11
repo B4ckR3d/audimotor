@@ -17,6 +17,7 @@ const contactTypes = [
   { value: 'phone', label: 'Telepon', icon: 'fa-phone-alt' },
   { value: 'whatsapp', label: 'WhatsApp', icon: 'fab fa-whatsapp' },
   { value: 'email', label: 'Email', icon: 'fa-envelope' },
+  { value: 'map', label: 'Google Maps Embed URL', icon: 'fa-map' },
   { value: 'fax', label: 'Fax', icon: 'fa-fax' },
   { value: 'other', label: 'Lainnya', icon: 'fa-info-circle' },
 ];

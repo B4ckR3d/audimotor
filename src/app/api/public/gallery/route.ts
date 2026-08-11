@@ -1,8 +1,10 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { GalleryItem } from '@/types';
 
-export async function GET(request: NextRequest) {
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
   try {
     const db = getDb();
     const items = db.prepare('SELECT * FROM gallery WHERE is_active = 1 ORDER BY sort_order ASC, id DESC').all() as GalleryItem[];

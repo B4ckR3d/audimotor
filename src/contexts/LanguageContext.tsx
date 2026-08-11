@@ -100,7 +100,7 @@ const dict: Record<Lang, Record<string, string>> = {
     'footer.consignment': 'Titip Jual',
     'footer.about': 'Tentang Kami',
     'footer.contact': 'Kontak Showroom',
-    'footer.copyright': 'Hak Cipta Dilindungi. Bukan bagian dari Audi AG.',
+    'footer.copyright': 'Hak Cipta Dilindungi.',
     'footer.terms': 'Syarat & Ketentuan',
     'footer.privacy': 'Kebijakan Privasi',
 
@@ -426,7 +426,7 @@ const dict: Record<Lang, Record<string, string>> = {
     'footer.consignment': 'Consignment',
     'footer.about': 'About Us',
     'footer.contact': 'Showroom Contact',
-    'footer.copyright': 'All Rights Reserved. Not affiliated with Audi AG.',
+    'footer.copyright': 'All Rights Reserved.',
     'footer.terms': 'Terms & Conditions',
     'footer.privacy': 'Privacy Policy',
 
@@ -678,9 +678,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('lang') as Lang | null;
-    if (saved) setLangState(saved);
+    if (saved && saved !== lang) {
+      setLangState(saved);
+    }
     setMounted(true);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleLang = () => {
     const next = lang === 'id' ? 'en' : 'id';
@@ -688,17 +690,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('lang', next);
   };
 
+  const currentLang = mounted ? lang : 'id';
+
   const t = (key: string): string => {
-    const val = dict[lang][key];
+    const val = dict[currentLang][key];
     return val ?? key;
   };
 
-  if (!mounted) {
-    /* render children immediately so they can read lang synchronously on first paint */
-  }
-
   return (
-    <LanguageContext.Provider value={{ lang, toggleLang, t }}>
+    <LanguageContext.Provider value={{ lang: currentLang, toggleLang, t }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -1,10 +1,10 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import { ContactInfo } from '@/types';
 import { useLang } from '@/contexts/LanguageContext';
 
-const MAP_EMBED = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0!2d106.8!3d-6.2!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTInMDAuMCJTIDEwNsKwNDgnMDAuMCJF!5e0!3m2!1sen!2sid!4v1';
+const MAP_EMBED = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.76!2d110.1824041!3d-7.2677689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7079aa4bf9f8ab%3A0xdf54036efece3386!2sBero%2C%20Caruban%2C%20Kec.%20Kandangan%2C%20Kabupaten%20Temanggung%2C%20Jawa%20Tengah%2056281!5e0!3m2!1sen!2sid!4v1';
 
 export default function ShowroomMapSection() {
   const { t } = useLang();

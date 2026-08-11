@@ -1,8 +1,10 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/db';
 import { Promotion } from '@/types';
 
-export async function GET(request: NextRequest) {
+export const dynamic = 'force-dynamic';
+
+export async function GET() {
   try {
     const db = getDb();
     const promotions = db.prepare("SELECT * FROM promotions WHERE is_active = 1 ORDER BY id DESC").all() as Promotion[];
