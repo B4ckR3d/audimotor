@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { SocialLink } from '@/types';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const db = getDb();
-    const links = db.prepare('SELECT * FROM social_links WHERE is_active = 1 ORDER BY sort_order ASC, id ASC').all() as SocialLink[];
+    const links = await prisma.socialLink.findMany({
+      where: { is_active: 1 },
+      orderBy: [
+        { sort_order: 'asc' },
+        { id: 'asc' },
+      ],
+    });
     return NextResponse.json(links);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil data social links' }, { status: 500 });

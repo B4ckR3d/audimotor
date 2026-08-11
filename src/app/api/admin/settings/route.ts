@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { SiteSetting } from '@/types';
+import prisma from '@/lib/prisma';
 import { checkPermission } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'settings', 'read');
+    const { allowed } = await checkPermission(request, 'settings', 'read');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
-    const db = getDb();
-    const settings = db.prepare('SELECT * FROM site_settings ORDER BY setting_group, setting_key').all() as SiteSetting[];
+    const settings = await prisma.siteSetting.findMany({
+      orderBy: [
+        { setting_group: 'asc' },
+        { setting_key: 'asc' },
+      ],
+    });
     return NextResponse.json(settings);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil pengaturan' }, { status: 500 });
@@ -20,29 +23,36 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'settings', 'write');
+    const { allowed } = await checkPermission(request, 'settings', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
     const body = await request.json();
-    const db = getDb();
 
-    const stmt = db.prepare(`
-      INSERT INTO site_settings (setting_key, setting_value, setting_type, setting_group)
-      VALUES (?, ?, ?, ?)
-      ON CONFLICT(setting_key) DO UPDATE SET setting_value = excluded.setting_value, setting_type = excluded.setting_type, updated_at = CURRENT_TIMESTAMP
-    `);
+    const upsertItem = async (item: { key: string; value: string; type?: string; group?: string }) => {
+      await prisma.siteSetting.upsert({
+        where: { setting_key: item.key },
+        update: {
+          setting_value: item.value,
+          setting_type: item.type || 'text',
+          setting_group: item.group || 'general',
+        },
+        create: {
+          setting_key: item.key,
+          setting_value: item.value,
+          setting_type: item.type || 'text',
+          setting_group: item.group || 'general',
+        },
+      });
+    };
 
     if (Array.isArray(body.settings)) {
-      const insertMany = db.transaction((items: Array<{ key: string; value: string; type?: string; group?: string }>) => {
-        for (const item of items) {
-          stmt.run(item.key, item.value, item.type || 'text', item.group || 'general');
-        }
-      });
-      insertMany(body.settings);
+      for (const item of body.settings) {
+        await upsertItem(item);
+      }
     } else {
-      stmt.run(body.key, body.value, body.type || 'text', body.group || 'general');
+      await upsertItem(body);
     }
 
     return NextResponse.json({ message: 'Pengaturan berhasil disimpan' });
@@ -53,27 +63,26 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'settings', 'write');
+    const { allowed } = await checkPermission(request, 'settings', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
     const body = await request.json();
-    const db = getDb();
 
-    const stmt = db.prepare(`
-      UPDATE site_settings SET setting_value = ?, updated_at = CURRENT_TIMESTAMP WHERE setting_key = ?
-    `);
+    const updateItem = async (item: { key: string; value: string }) => {
+      await prisma.siteSetting.update({
+        where: { setting_key: item.key },
+        data: { setting_value: item.value },
+      });
+    };
 
     if (Array.isArray(body.settings)) {
-      const updateMany = db.transaction((items: Array<{ key: string; value: string }>) => {
-        for (const item of items) {
-          stmt.run(item.value, item.key);
-        }
-      });
-      updateMany(body.settings);
+      for (const item of body.settings) {
+        await updateItem(item);
+      }
     } else {
-      stmt.run(body.value, body.key);
+      await updateItem(body);
     }
 
     return NextResponse.json({ message: 'Pengaturan berhasil diperbarui' });

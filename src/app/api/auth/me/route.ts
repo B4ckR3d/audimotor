@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { validateSession, getCookieValue, getUserPermissions } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
@@ -10,14 +10,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Tidak ada sesi aktif' }, { status: 401 });
     }
 
-    const session = validateSession(token);
+    const session = await validateSession(token);
     if (!session) {
       const response = NextResponse.json({ error: 'Sesi sudah berakhir' }, { status: 401 });
       response.cookies.set('session_token', '', { maxAge: 0, path: '/' });
       return response;
     }
 
-    const permissions = getUserPermissions(session.role);
+    const permissions = await getUserPermissions(session.role);
 
     return NextResponse.json({
       success: true,
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
         permissions
       }
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Terjadi kesalahan' }, { status: 500 });
   }
 }

@@ -2,22 +2,27 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import { getDb } from "@/lib/db";
+import prisma from "@/lib/prisma";
 
 const inter = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-function getSettings(): Record<string, string> {
+async function getSettings(): Promise<Record<string, string>> {
   try {
-    const db = getDb();
-    const rows = db
-      .prepare("SELECT setting_key, setting_value FROM site_settings WHERE setting_key IN ('site_name', 'site_favicon')")
-      .all() as { setting_key: string; setting_value: string }[];
+    const rows = await prisma.siteSetting.findMany({
+      where: {
+        setting_key: {
+          in: ['site_name', 'site_favicon'],
+        },
+      },
+    });
     const map: Record<string, string> = {};
     for (const row of rows) {
-      map[row.setting_key] = row.setting_value;
+      if (row.setting_value) {
+        map[row.setting_key] = row.setting_value;
+      }
     }
     return map;
   } catch {
@@ -26,7 +31,7 @@ function getSettings(): Record<string, string> {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = getSettings();
+  const settings = await getSettings();
   const siteName = settings.site_name || "Audi Motor";
   const faviconUrl = settings.site_favicon || undefined;
 

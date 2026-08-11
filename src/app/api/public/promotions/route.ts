@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { Promotion } from '@/types';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const db = getDb();
-    const promotions = db.prepare("SELECT * FROM promotions WHERE is_active = 1 ORDER BY id DESC").all() as Promotion[];
+    const promotions = await prisma.promotion.findMany({
+      where: { is_active: 1 },
+      orderBy: { id: 'desc' },
+    });
     return NextResponse.json(promotions);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil data promosi' }, { status: 500 });

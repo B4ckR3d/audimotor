@@ -7,14 +7,14 @@ export async function POST(request: NextRequest) {
     const token = getCookieValue(cookieHeader, 'session_token');
 
     if (token) {
-      deleteSession(token);
+      await deleteSession(token);
     }
 
     const response = NextResponse.json({ success: true });
     response.cookies.set('session_token', '', { maxAge: 0, path: '/' });
 
     return response;
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Terjadi kesalahan' }, { status: 500 });
   }
 }

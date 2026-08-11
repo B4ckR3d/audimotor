@@ -10,7 +10,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..', '..', '..');
 
 export async function POST(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'hero', 'write');
+    const { allowed } = await checkPermission(request, 'hero', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }

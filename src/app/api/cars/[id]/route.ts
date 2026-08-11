@@ -1,19 +1,21 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { Car } from '@/types';
+import prisma from '@/lib/prisma';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const db = getDb();
-    const car = db.prepare('SELECT * FROM cars WHERE id = ?').get(Number(id)) as Car | undefined;
+    const car = await prisma.car.findUnique({
+      where: { id: Number(id) },
+    });
 
     if (!car) {
       return NextResponse.json({ error: 'Mobil tidak ditemukan' }, { status: 404 });
     }
 
     return NextResponse.json(car);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Gagal mengambil data mobil' }, { status: 500 });
   }
 }

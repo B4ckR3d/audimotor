@@ -1,4 +1,4 @@
-import { getDb } from './db';
+import prisma from './prisma';
 import crypto from 'crypto';
 import { NextRequest } from 'next/server';
 
@@ -14,33 +14,46 @@ export function verifyPassword(password: string, passwordHash: string): boolean 
   return hash === hashToVerify;
 }
 
-export function createSession(userId: number): string {
-  const db = getDb();
+export async function createSession(userId: number): Promise<string> {
   const token = crypto.randomBytes(32).toString('hex');
-  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+  const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-  db.prepare('DELETE FROM sessions WHERE user_id = ?').run(userId);
-  db.prepare('INSERT INTO sessions (session_token, user_id, expires_at) VALUES (?, ?, ?)').run(token, userId, expiresAt);
+  await prisma.session.deleteMany({
+    where: { user_id: userId },
+  });
+
+  await prisma.session.create({
+    data: {
+      session_token: token,
+      user_id: userId,
+      expires_at: expiresAt,
+    },
+  });
 
   return token;
 }
 
-export function validateSession(token: string): { userId: number; username: string; role: string } | null {
-  const db = getDb();
-  const session = db.prepare(`
-    SELECT s.user_id, u.username, u.role
-    FROM sessions s
-    JOIN users u ON s.user_id = u.id
-    WHERE s.session_token = ? AND s.expires_at > datetime('now') AND u.is_active = 1
-  `).get(token) as { user_id: number; username: string; role: string } | undefined;
+export async function validateSession(token: string): Promise<{ userId: number; username: string; role: string } | null> {
+  const session = await prisma.session.findUnique({
+    where: { session_token: token },
+    include: { user: true },
+  });
 
-  if (!session) return null;
-  return { userId: session.user_id, username: session.username, role: session.role };
+  if (!session || !session.user || !session.user.is_active || session.expires_at < new Date()) {
+    return null;
+  }
+
+  return {
+    userId: session.user.id,
+    username: session.user.username,
+    role: session.user.role || 'admin',
+  };
 }
 
-export function deleteSession(token: string): void {
-  const db = getDb();
-  db.prepare('DELETE FROM sessions WHERE session_token = ?').run(token);
+export async function deleteSession(token: string): Promise<void> {
+  await prisma.session.deleteMany({
+    where: { session_token: token },
+  });
 }
 
 export function getCookieValue(cookieHeader: string | null, name: string): string | null {
@@ -49,17 +62,19 @@ export function getCookieValue(cookieHeader: string | null, name: string): strin
   return match ? decodeURIComponent(match[1]) : null;
 }
 
-export function getCurrentUser(request: NextRequest) {
+export async function getCurrentUser(request: NextRequest) {
   const cookieHeader = request.headers.get('cookie');
   const token = getCookieValue(cookieHeader, 'session_token');
   if (!token) return null;
-  return validateSession(token);
+  return await validateSession(token);
 }
 
-export function getUserPermissions(roleName: string): Record<string, string> {
-  const db = getDb();
-  const role = db.prepare('SELECT permissions FROM roles WHERE name = ?').get(roleName) as { permissions: string } | undefined;
-  if (!role) return {};
+export async function getUserPermissions(roleName: string): Promise<Record<string, string>> {
+  const role = await prisma.role.findUnique({
+    where: { name: roleName },
+  });
+
+  if (!role || !role.permissions) return {};
   try {
     return JSON.parse(role.permissions);
   } catch {
@@ -67,18 +82,18 @@ export function getUserPermissions(roleName: string): Record<string, string> {
   }
 }
 
-export function checkPermission(
+export async function checkPermission(
   request: NextRequest,
   section: string,
   action: 'read' | 'write'
-): { allowed: boolean; user: ReturnType<typeof getCurrentUser> } {
-  const user = getCurrentUser(request);
+): Promise<{ allowed: boolean; user: Awaited<ReturnType<typeof getCurrentUser>> }> {
+  const user = await getCurrentUser(request);
   if (!user) return { allowed: false, user: null };
 
   // admin role has full access
   if (user.role === 'admin') return { allowed: true, user };
 
-  const permissions = getUserPermissions(user.role);
+  const permissions = await getUserPermissions(user.role);
   const perm = permissions[section] || 'none';
 
   if (action === 'read' && (perm === 'read' || perm === 'write')) {

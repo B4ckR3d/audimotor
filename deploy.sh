@@ -10,6 +10,9 @@ git pull
 echo "🗑️  Clearing Next.js cache..."
 rm -rf .next
 
+echo "⚙️  Generating Prisma Client..."
+npx prisma generate
+
 echo "📦 Building..."
 npm run build
 

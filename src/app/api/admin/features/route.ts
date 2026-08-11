@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { Feature } from '@/types';
+import prisma from '@/lib/prisma';
 import { checkPermission } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'features', 'read');
+    const { allowed } = await checkPermission(request, 'features', 'read');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
-    const db = getDb();
-    const features = db.prepare('SELECT * FROM features ORDER BY sort_order ASC, id ASC').all() as Feature[];
+    const features = await prisma.feature.findMany({
+      orderBy: [
+        { sort_order: 'asc' },
+        { id: 'asc' },
+      ],
+    });
     return NextResponse.json(features);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil data fitur' }, { status: 500 });
@@ -20,28 +23,24 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'features', 'write');
+    const { allowed } = await checkPermission(request, 'features', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
     const body = await request.json();
-    const db = getDb();
 
-    const stmt = db.prepare(`
-      INSERT INTO features (icon, title, description, sort_order, is_active)
-      VALUES (?, ?, ?, ?, ?)
-    `);
+    const result = await prisma.feature.create({
+      data: {
+        icon: body.icon,
+        title: body.title,
+        description: body.description,
+        sort_order: Number(body.sort_order || 0),
+        is_active: body.is_active !== undefined ? (body.is_active ? 1 : 0) : 1,
+      },
+    });
 
-    const result = stmt.run(
-      body.icon,
-      body.title,
-      body.description,
-      body.sort_order || 0,
-      body.is_active !== undefined ? (body.is_active ? 1 : 0) : 1
-    );
-
-    return NextResponse.json({ message: 'Fitur berhasil ditambahkan', id: result.lastInsertRowid }, { status: 201 });
+    return NextResponse.json({ message: 'Fitur berhasil ditambahkan', id: result.id }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Gagal menambahkan fitur' }, { status: 500 });
   }
@@ -49,33 +48,28 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'features', 'write');
+    const { allowed } = await checkPermission(request, 'features', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
     const body = await request.json();
-    const db = getDb();
 
-    const stmt = db.prepare(`
-      UPDATE features SET icon=?, title=?, description=?, sort_order=?, is_active=?, updated_at=CURRENT_TIMESTAMP
-      WHERE id=?
-    `);
-
-    const result = stmt.run(
-      body.icon,
-      body.title,
-      body.description,
-      body.sort_order || 0,
-      body.is_active ? 1 : 0,
-      body.id
-    );
-
-    if (result.changes === 0) {
+    try {
+      await prisma.feature.update({
+        where: { id: Number(body.id) },
+        data: {
+          icon: body.icon,
+          title: body.title,
+          description: body.description,
+          sort_order: Number(body.sort_order || 0),
+          is_active: body.is_active ? 1 : 0,
+        },
+      });
+      return NextResponse.json({ message: 'Fitur berhasil diperbarui' });
+    } catch {
       return NextResponse.json({ error: 'Fitur tidak ditemukan' }, { status: 404 });
     }
-
-    return NextResponse.json({ message: 'Fitur berhasil diperbarui' });
   } catch {
     return NextResponse.json({ error: 'Gagal memperbarui fitur' }, { status: 500 });
   }
@@ -83,7 +77,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'features', 'write');
+    const { allowed } = await checkPermission(request, 'features', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
@@ -94,14 +88,14 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'ID diperlukan' }, { status: 400 });
     }
 
-    const db = getDb();
-    const result = db.prepare('DELETE FROM features WHERE id = ?').run(Number(id));
-
-    if (result.changes === 0) {
+    try {
+      await prisma.feature.delete({
+        where: { id: Number(id) },
+      });
+      return NextResponse.json({ message: 'Fitur berhasil dihapus' });
+    } catch {
       return NextResponse.json({ error: 'Fitur tidak ditemukan' }, { status: 404 });
     }
-
-    return NextResponse.json({ message: 'Fitur berhasil dihapus' });
   } catch {
     return NextResponse.json({ error: 'Gagal menghapus fitur' }, { status: 500 });
   }

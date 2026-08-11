@@ -1,18 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const db = getDb();
-    const rows = db
-      .prepare("SELECT setting_key, setting_value FROM site_settings WHERE setting_key IN ('site_name', 'site_logo', 'site_favicon')")
-      .all() as { setting_key: string; setting_value: string }[];
+    const rows = await prisma.siteSetting.findMany({
+      where: {
+        setting_key: {
+          in: ['site_name', 'site_logo', 'site_favicon'],
+        },
+      },
+    });
 
     const settings: Record<string, string> = {};
     for (const row of rows) {
-      settings[row.setting_key] = row.setting_value;
+      if (row.setting_value) {
+        settings[row.setting_key] = row.setting_value;
+      }
     }
 
     return NextResponse.json({

@@ -1,0 +1,192 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Car {
+  id           Int      @id @default(autoincrement())
+  name         String
+  brand        String
+  model        String
+  year         Int
+  price        Int
+  mileage      Int
+  transmission String   @default("Automatic")
+  fuel         String   @default("Bensin")
+  color        String   @default("Hitam")
+  description  String?  @default("")
+  image_url    String?  @default("")
+  status       String   @default("available")
+  is_featured  Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now()) @updatedAt
+
+  @@map("cars")
+}
+
+model SiteSetting {
+  id            Int      @id @default(autoincrement())
+  setting_key   String   @unique
+  setting_value String?  @default("")
+  setting_type  String?  @default("text")
+  setting_group String?  @default("general")
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  @@map("site_settings")
+}
+
+model HeroSection {
+  id                    Int      @id @default(autoincrement())
+  title                 String   @default("Masa Depan Keluarga Anda Dimulai di Sini.")
+  subtitle              String?  @default("Kami menghadirkan koleksi mobil bekas premium, terawat, dan berkualitas tinggi khusus untuk kenyamanan dan keamanan perjalanan keluarga Anda.")
+  badge                 String?  @default("Dealer Mobil Keluarga Terpercaya")
+  button_primary_text   String?  @default("Lihat Koleksi")
+  button_primary_link   String?  @default("/#koleksi")
+  button_secondary_text String?  @default("Konsultasi WA")
+  button_secondary_link String?  @default("https://wa.me/6281234567890")
+  background_image      String?  @default("")
+  background_video      String?  @default("")
+  is_active             Int?     @default(1)
+  created_at            DateTime @default(now())
+  updated_at            DateTime @default(now()) @updatedAt
+
+  @@map("hero_sections")
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  icon        String   @default("fa-shield-alt")
+  title       String
+  description String
+  sort_order  Int?     @default(0)
+  is_active   Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  @@map("features")
+}
+
+model Gallery {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?  @default("")
+  image_url   String
+  category    String?  @default("general")
+  sort_order  Int?     @default(0)
+  is_active   Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  @@map("gallery")
+}
+
+model ContactInfo {
+  id            Int      @id @default(autoincrement())
+  contact_type  String
+  contact_value String
+  label         String?  @default("")
+  is_active     Int?     @default(1)
+  sort_order    Int?     @default(0)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  @@map("contact_info")
+}
+
+model SocialLink {
+  id         Int      @id @default(autoincrement())
+  platform   String
+  url        String
+  icon       String?  @default("")
+  is_active  Int?     @default(1)
+  sort_order Int?     @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("social_links")
+}
+
+model Page {
+  id               Int      @id @default(autoincrement())
+  slug             String   @unique
+  title            String
+  content          String?  @default("")
+  meta_description String?  @default("")
+  is_active        Int?     @default(1)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @default(now()) @updatedAt
+
+  @@map("pages")
+}
+
+model Testimonial {
+  id              Int      @id @default(autoincrement())
+  customer_name   String
+  customer_avatar String?  @default("")
+  rating          Int?     @default(5)
+  comment         String
+  car_purchased   String?  @default("")
+  is_active       Int?     @default(1)
+  sort_order      Int?     @default(0)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now()) @updatedAt
+
+  @@map("testimonials")
+}
+
+model Promotion {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?  @default("")
+  image_url     String?  @default("")
+  discount_text String?  @default("")
+  start_date    String?
+  end_date      String?
+  is_active     Int?     @default(1)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  @@map("promotions")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  password_hash String
+  full_name     String?   @default("")
+  role          String?   @default("admin")
+  is_active     Int?      @default(1)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id            Int      @id @default(autoincrement())
+  session_token String   @unique
+  user_id       Int
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  label       String
+  description String?  @default("")
+  permissions String?  @default("{}")
+  is_active   Int?     @default(1)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  @@map("roles")
+}

@@ -1,17 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { hashPassword, checkPermission } from '@/lib/auth';
-import { User } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'users', 'read');
+    const { allowed } = await checkPermission(request, 'users', 'read');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
 
-    const db = getDb();
-    const users = db.prepare('SELECT id, username, full_name, role, is_active, created_at, updated_at FROM users ORDER BY created_at DESC').all() as User[];
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        full_name: true,
+        role: true,
+        is_active: true,
+        created_at: true,
+        updated_at: true,
+      },
+      orderBy: { created_at: 'desc' },
+    });
     return NextResponse.json(users);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil data users' }, { status: 500 });
@@ -20,7 +29,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { allowed } = checkPermission(request, 'users', 'write');
+    const { allowed } = await checkPermission(request, 'users', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
@@ -32,18 +41,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Username dan password harus diisi' }, { status: 400 });
     }
 
-    const db = getDb();
-    const existing = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+    const existing = await prisma.user.findUnique({
+      where: { username },
+    });
     if (existing) {
       return NextResponse.json({ error: 'Username sudah digunakan' }, { status: 400 });
     }
 
     const passwordHash = hashPassword(password);
-    const result = db.prepare(
-      'INSERT INTO users (username, password_hash, full_name, role, is_active) VALUES (?, ?, ?, ?, 1)'
-    ).run(username, passwordHash, full_name || '', role || 'editor');
+    const result = await prisma.user.create({
+      data: {
+        username,
+        password_hash: passwordHash,
+        full_name: full_name || '',
+        role: role || 'editor',
+        is_active: 1,
+      },
+    });
 
-    return NextResponse.json({ message: 'User berhasil ditambahkan', id: result.lastInsertRowid }, { status: 201 });
+    return NextResponse.json({ message: 'User berhasil ditambahkan', id: result.id }, { status: 201 });
   } catch {
     return NextResponse.json({ error: 'Gagal menambahkan user' }, { status: 500 });
   }
@@ -51,7 +67,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { allowed, user } = checkPermission(request, 'users', 'write');
+    const { allowed, user } = await checkPermission(request, 'users', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
@@ -63,23 +79,31 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'ID diperlukan' }, { status: 400 });
     }
 
-    const db = getDb();
-
-    // Non-admin users cannot change roles
     if (user?.role !== 'admin' && role) {
       return NextResponse.json({ error: 'Hanya admin yang bisa mengubah role' }, { status: 403 });
     }
 
+    const userId = Number(id);
+    const dataToUpdate: Record<string, unknown> = {
+      username,
+      full_name,
+      role,
+      is_active: is_active ? 1 : 0,
+    };
+
     if (password) {
-      const passwordHash = hashPassword(password);
-      db.prepare('UPDATE users SET username=?, password_hash=?, full_name=?, role=?, is_active=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
-        .run(username, passwordHash, full_name, role, is_active ? 1 : 0, id);
-    } else {
-      db.prepare('UPDATE users SET username=?, full_name=?, role=?, is_active=?, updated_at=CURRENT_TIMESTAMP WHERE id=?')
-        .run(username, full_name, role, is_active ? 1 : 0, id);
+      dataToUpdate.password_hash = hashPassword(password);
     }
 
-    return NextResponse.json({ message: 'User berhasil diperbarui' });
+    try {
+      await prisma.user.update({
+        where: { id: userId },
+        data: dataToUpdate,
+      });
+      return NextResponse.json({ message: 'User berhasil diperbarui' });
+    } catch {
+      return NextResponse.json({ error: 'User tidak ditemukan' }, { status: 404 });
+    }
   } catch {
     return NextResponse.json({ error: 'Gagal memperbarui user' }, { status: 500 });
   }
@@ -87,7 +111,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { allowed, user } = checkPermission(request, 'users', 'write');
+    const { allowed, user } = await checkPermission(request, 'users', 'write');
     if (!allowed) {
       return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
     }
@@ -98,18 +122,20 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'ID diperlukan' }, { status: 400 });
     }
 
-    if (Number(id) === user?.userId) {
+    const userId = Number(id);
+
+    if (userId === user?.userId) {
       return NextResponse.json({ error: 'Tidak bisa menghapus akun sendiri' }, { status: 400 });
     }
 
-    const db = getDb();
-    const result = db.prepare('DELETE FROM users WHERE id = ?').run(Number(id));
-
-    if (result.changes === 0) {
+    try {
+      await prisma.user.delete({
+        where: { id: userId },
+      });
+      return NextResponse.json({ message: 'User berhasil dihapus' });
+    } catch {
       return NextResponse.json({ error: 'User tidak ditemukan' }, { status: 404 });
     }
-
-    return NextResponse.json({ message: 'User berhasil dihapus' });
   } catch {
     return NextResponse.json({ error: 'Gagal menghapus user' }, { status: 500 });
   }

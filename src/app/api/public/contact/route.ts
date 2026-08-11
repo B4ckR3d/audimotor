@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { getDb } from '@/lib/db';
-import { ContactInfo } from '@/types';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const db = getDb();
-    const contacts = db.prepare("SELECT * FROM contact_info WHERE is_active = 1 ORDER BY sort_order ASC, id ASC").all() as ContactInfo[];
+    const contacts = await prisma.contactInfo.findMany({
+      where: { is_active: 1 },
+      orderBy: [
+        { sort_order: 'asc' },
+        { id: 'asc' },
+      ],
+    });
     return NextResponse.json(contacts);
   } catch {
     return NextResponse.json({ error: 'Gagal mengambil data kontak' }, { status: 500 });

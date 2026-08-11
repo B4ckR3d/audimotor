@@ -1,4 +1,4 @@
-﻿import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
 import CarCatalog from '@/components/CarCatalog';
@@ -9,16 +9,19 @@ import CatalogHeader from '@/components/CatalogHeader';
 import GallerySection from '@/components/GallerySection';
 import PromotionsSection from '@/components/PromotionsSection';
 import ShowroomMapSection from '@/components/ShowroomMapSection';
-import { getDb } from '@/lib/db';
+import prisma from '@/lib/prisma';
 import { Car } from '@/types';
 
 async function getCars(): Promise<Car[]> {
   try {
-    const db = getDb();
-    const rows = db
-      .prepare('SELECT * FROM cars WHERE status = ? ORDER BY is_featured DESC, created_at DESC')
-      .all('available') as Car[];
-    return rows;
+    const rows = await prisma.car.findMany({
+      where: { status: 'available' },
+      orderBy: [
+        { is_featured: 'desc' },
+        { created_at: 'desc' },
+      ],
+    });
+    return rows as unknown as Car[];
   } catch {
     return [];
   }
